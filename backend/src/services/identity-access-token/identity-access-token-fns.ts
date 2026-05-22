@@ -14,6 +14,7 @@ import {
   TSignIdentityAccessTokenInput,
   TSignIdentityAccessTokenOutput
 } from "./identity-access-token-types";
+import { computeIssuedTtlCore } from "./identity-access-token-ttl";
 
 export const hasNonWildcardTrustedIps = (trustedIps: TIp[] | null | undefined): boolean => {
   if (!trustedIps || trustedIps.length === 0) {
@@ -122,22 +123,7 @@ export const computeIssuedTtl = ({
 }: TComputeIssuedTtlInput): number => {
   const { MAX_MACHINE_IDENTITY_TOKEN_AGE: ceiling } = getConfig();
 
-  let requestedCap = Infinity;
-  if (requestedTTL > 0) {
-    requestedCap = requestedTTL;
-  }
-
-  let remainingBudget = Infinity;
-  // this handles tokens with a maxTTL for renewal cases
-  if (maxTTL > 0) {
-    remainingBudget = creationEpoch + maxTTL - nowSeconds;
-  }
-
-  // this essentially says, give us the value that expires the soonest of:
-  //  - the TTL in the token config
-  //  - The remaining time that the token as a whole can be renewed for
-  //  - The maximum TTL for any single token issuance (defined by env var)
-  return Math.min(requestedCap, remainingBudget, ceiling);
+  return computeIssuedTtlCore(requestedTTL, maxTTL, creationEpoch, nowSeconds, ceiling);
 };
 
 export const signIdentityAccessToken = (input: TSignIdentityAccessTokenInput): TSignIdentityAccessTokenOutput => {
