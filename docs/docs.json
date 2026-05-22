@@ -187,7 +187,6 @@
                 "pages": [
                   "documentation/platform/external-migrations/overview",
                   "documentation/platform/external-migrations/doppler",
-                  "documentation/platform/external-migrations/envkey",
                   "documentation/platform/external-migrations/vault"
                 ]
               },
@@ -267,6 +266,7 @@
                     "pages": [
                       "documentation/platform/ldap/overview",
                       "documentation/platform/ldap/jumpcloud",
+                      "documentation/platform/ldap/google-workspace",
                       "documentation/platform/ldap/general"
                     ]
                   },
@@ -513,6 +513,7 @@
                       "documentation/platform/dynamic-secrets/gcp-iam",
                       "documentation/platform/dynamic-secrets/github",
                       "documentation/platform/dynamic-secrets/ldap",
+                      "documentation/platform/dynamic-secrets/milvus",
                       "documentation/platform/dynamic-secrets/mongo-atlas",
                       "documentation/platform/dynamic-secrets/mongo-db",
                       "documentation/platform/dynamic-secrets/mssql",
@@ -3407,10 +3408,6 @@
               {
                 "group": "Doppler",
                 "pages": [
-                  "api-reference/endpoints/external-migrations/doppler/get-configs",
-                  "api-reference/endpoints/external-migrations/doppler/create-config",
-                  "api-reference/endpoints/external-migrations/doppler/update-config",
-                  "api-reference/endpoints/external-migrations/doppler/delete-config",
                   "api-reference/endpoints/external-migrations/doppler/get-projects",
                   "api-reference/endpoints/external-migrations/doppler/get-environments",
                   "api-reference/endpoints/external-migrations/doppler/import-secrets"
