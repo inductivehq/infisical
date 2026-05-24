@@ -1,104 +1,77 @@
-# Infisical ts-viper MVP
+# Infisical ts-viper Checkpoint
 
-This directory contains fork-local verification artifacts for the machine identity access-token TTL
-MVP. The production helper remains in `backend/src/services/identity-access-token`, while generated
-spec outputs and evaluation files stay under this directory.
+This directory contains fork-local verification artifacts for measuring how far automated speccing
+can get on representative Infisical TypeScript code. Runtime code remains under `backend/src`;
+goldens, claim corpora, mutants, generated specs, and eval artifacts stay here.
 
-## Target
+Generated outputs and eval artifacts are ignored by git:
 
-- Runtime: `backend/src/services/identity-access-token/identity-access-token-ttl.ts`
-- Golden spec: `backend/ts-viper/goldens/identity-access-token-ttl.spec.ts`
-- Mutant: `backend/ts-viper/mutants/identity-access-token-ttl-buggy.ts`
+- `generated/`
+- `evals/`
 
-The trusted boundary is config loading in `identity-access-token-fns.ts`; the verifier target is the
-pure TTL cap decision in `computeIssuedTtlCore(...)`.
+## Targets
+
+| Area                       | Runtime target                                                                                                           | Why it is useful                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Machine identity token TTL | `computeIssuedTtlCore(...)` in `src/services/identity-access-token/identity-access-token-ttl.ts`                         | Numeric cap selection with requested TTL, deployment ceiling, and remaining maxTTL budget.    |
+| CASL glob containment      | `segmentKindContains(...)` in `src/lib/casl/glob-subset-core.ts`                                                         | Permission-boundary logic for literal, star, globstar, and unsupported path segments.         |
+| Access approval requests   | `classifyRequestedPermissionScopeCore(...)` in `src/ee/services/access-approval-request/access-approval-request-core.ts` | Normalized decision table for rejecting empty, malformed, or mixed-scope permission requests. |
+
+The extracted CASL and access-approval helpers are exported `const` function values so they exercise
+Specr's const function target discovery and sidecar binding path. The access-approval helper keeps
+the production behavior that empty environment/path strings are invalid.
+
+## Artifacts
+
+- Goldens: `backend/ts-viper/goldens/*.spec.ts`
+- Claim corpora: `backend/ts-viper/claims/*.json`
+- Mutants: `backend/ts-viper/mutants/*-buggy.ts`
+- Checkpoints: `backend/ts-viper/checkpoints/`
+
+The goldens are intended as north-star specs: every `requires(...)` or `ensures(...)` clause has a
+comment explaining the behavior it asserts, and the claims are validated against the golden before
+generated-output accuracy is scored.
 
 ## Commands
 
-From the `ts-viper` checkout:
+Run from the `ts-viper` checkout:
 
 ```sh
 cd /Users/andy/dev/ts-viper/specr
-mkdir -p /Users/andy/dev/infisical/backend/ts-viper/generated/run-001
+mkdir -p /Users/andy/dev/infisical/backend/ts-viper/generated/gpt-5.5-2026-05
+```
+
+Generate with GPT 5.5:
+
+```sh
 uv run specr generate \
-  /Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts:computeIssuedTtlCore \
-  --model "$SPECR_MODEL" \
-  --output-dir /Users/andy/dev/infisical/backend/ts-viper/generated/run-001
-```
-
-Verify and score a generated sidecar:
-
-```sh
-uv run specr score \
-  /Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts \
-  --output /Users/andy/dev/infisical/backend/ts-viper/generated/run-001/identity-access-token-ttl.spec.ts \
-  --golden /Users/andy/dev/infisical/backend/ts-viper/goldens/identity-access-token-ttl.spec.ts \
-  --mutant /Users/andy/dev/infisical/backend/ts-viper/mutants/identity-access-token-ttl-buggy.ts \
-  --eval-dir /Users/andy/dev/infisical/backend/ts-viper/evals \
-  --server-url "$VIPER_SERVER_URL"
-```
-
-Generated outputs and eval artifacts are ignored by git.
-
-## Current MVP Status
-
-Implemented:
-
-- `computeIssuedTtlCore(...)` is the pure verifier target.
-- `computeIssuedTtl(...)` keeps the existing production API and delegates to the pure core after
-  reading `MAX_MACHINE_IDENTITY_TOKEN_AGE`.
-- The golden spec verifies the good runtime with ViperServer.
-- A buggy mutant that ignores `maxTTL` fails verification through `specr score`.
-
-Validation run:
-
-```sh
-cd /Users/andy/dev/ts-viper/specr
-uv run specr generate \
-  /Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts:computeIssuedTtlCore \
-  --llm-fixture /Users/andy/dev/infisical/backend/ts-viper/generated/run-001/llm-fixture.json \
-  --output-dir /Users/andy/dev/infisical/backend/ts-viper/generated/run-001
-
-uv run specr score \
-  /Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts \
-  --output /Users/andy/dev/infisical/backend/ts-viper/generated/run-001/identity-access-token-ttl.spec.ts \
-  --golden /Users/andy/dev/infisical/backend/ts-viper/goldens/identity-access-token-ttl.spec.ts \
-  --eval-dir /Users/andy/dev/infisical/backend/ts-viper/evals \
-  --server-url "$VIPER_SERVER_URL"
-
-uv run specr score \
-  /Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts \
-  --output /Users/andy/dev/infisical/backend/ts-viper/generated/run-001/identity-access-token-ttl.spec.ts \
-  --golden /Users/andy/dev/infisical/backend/ts-viper/goldens/identity-access-token-ttl.spec.ts \
-  --mutant /Users/andy/dev/infisical/backend/ts-viper/mutants/identity-access-token-ttl-buggy.ts \
-  --eval-dir /Users/andy/dev/infisical/backend/ts-viper/evals \
-  --server-url "$VIPER_SERVER_URL"
-```
-
-Results:
-
-- generated spec: `parsable: passed`
-- good runtime: `provable: passed`
-- mutant score: `provable: passed`; the underlying mutant verification result was `provable: false`
-- accuracy: `not_scored`; `specr` does not yet have an Infisical claim-corpus domain
-
-Real model trial:
-
-```sh
-cd /Users/andy/dev/ts-viper/specr
-env SPECR_MODEL=openai/gpt-5.5 uv run specr generate \
   /Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts:computeIssuedTtlCore \
   --model openai/gpt-5.5 \
-  --output-dir /Users/andy/dev/infisical/backend/ts-viper/generated/gpt-5.5-20260521-1
+  --output-dir /Users/andy/dev/infisical/backend/ts-viper/generated/gpt-5.5-2026-05
+
+uv run specr generate \
+  /Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts:segmentKindContains \
+  --model openai/gpt-5.5 \
+  --output-dir /Users/andy/dev/infisical/backend/ts-viper/generated/gpt-5.5-2026-05
+
+uv run specr generate \
+  /Users/andy/dev/infisical/backend/src/ee/services/access-approval-request/access-approval-request-core.ts:classifyRequestedPermissionScopeCore \
+  --model openai/gpt-5.5 \
+  --output-dir /Users/andy/dev/infisical/backend/ts-viper/generated/gpt-5.5-2026-05
 ```
 
-This real `gpt-5.5` generation completed, but the generated sidecar did not parse. It emitted
-`requires(!Number.isNaN(ceiling))`, and `Number.isNaN(...)` is outside the current sidecar
-expression subset. `specr score` reported `parsable: failed`, so provability was not run.
+Score a generated sidecar against claims:
 
-Next steps:
+```sh
+uv run specr score \
+  /Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts \
+  --output /Users/andy/dev/infisical/backend/ts-viper/generated/gpt-5.5-2026-05/glob-subset.spec.ts \
+  --golden /Users/andy/dev/infisical/backend/ts-viper/goldens/glob-subset.spec.ts \
+  --claims /Users/andy/dev/infisical/backend/ts-viper/claims/glob-subset.json \
+  --eval-dir /Users/andy/dev/infisical/backend/ts-viper/evals \
+  --server-url "$VIPER_SERVER_URL"
+```
 
-- Tighten the generation prompt or normalization pass so model outputs cannot include unsupported
-  helper calls such as `Number.isNaN(...)`.
-- Add a claim-corpus domain in `ts-viper` if semantic recall scoring is needed.
-- Evaluate the CASL glob-boundary helper as the next higher-value Infisical target.
+Add `--mutant backend/ts-viper/mutants/<name>-buggy.ts` to check whether a generated spec rejects a
+known bad runtime. Provability runs only when `--server-url` or `VIPER_SERVER_URL` is set; claim
+accuracy and generated-spec quality metrics still run without ViperServer.

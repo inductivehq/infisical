@@ -1,0 +1,63 @@
+{
+  "id": "infisical/access-approval-request",
+  "source": "../infisical/backend/src/ee/services/access-approval-request/access-approval-request-core.ts",
+  "golden": "../infisical/backend/ts-viper/goldens/access-approval-request.spec.ts",
+  "domain": "infisical/access-approval-request",
+  "mutants": [
+    "../infisical/backend/ts-viper/mutants/access-approval-request-empty-accept-buggy.ts",
+    "../infisical/backend/ts-viper/mutants/access-approval-request-missing-env-path-accept-buggy.ts",
+    "../infisical/backend/ts-viper/mutants/access-approval-request-mixed-accept-buggy.ts"
+  ],
+  "claims": [
+    {
+      "id": "infisical.access.reject-empty",
+      "target": "classifyRequestedPermissionScopeCore",
+      "text": "An access approval request with no permission rules is rejected.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "empty-access-request",
+      "condition": "ruleCount <= 0",
+      "expected": "reject-empty"
+    },
+    {
+      "id": "infisical.access.reject-missing-env",
+      "target": "classifyRequestedPermissionScopeCore",
+      "text": "A non-empty request whose first rule lacks a non-empty string environment is rejected.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "unscoped-environment-access",
+      "condition": "ruleCount > 0 && !firstEnvIsNonEmptyString",
+      "expected": "reject-env"
+    },
+    {
+      "id": "infisical.access.reject-missing-path",
+      "target": "classifyRequestedPermissionScopeCore",
+      "text": "A non-empty request whose first rule lacks a non-empty string secret path is rejected.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "unscoped-secret-path-access",
+      "condition": "ruleCount > 0 && firstEnvIsNonEmptyString && !firstPathIsNonEmptyString",
+      "expected": "reject-path"
+    },
+    {
+      "id": "infisical.access.reject-mixed-scope",
+      "target": "classifyRequestedPermissionScopeCore",
+      "text": "Permission rules spanning multiple environments or paths are rejected.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "mixed-scope-access-request",
+      "condition": "ruleCount > 0 && firstEnvIsNonEmptyString && firstPathIsNonEmptyString && !allRulesShareScope",
+      "expected": "reject-mixed-scope"
+    },
+    {
+      "id": "infisical.access.accept-same-scope",
+      "target": "classifyRequestedPermissionScopeCore",
+      "text": "A non-empty request with non-empty string env/path and one shared scope is accepted.",
+      "kind": "allow",
+      "criticality": 2,
+      "risk": "legitimate-access-request-denial",
+      "condition": "ruleCount > 0 && firstEnvIsNonEmptyString && firstPathIsNonEmptyString && allRulesShareScope",
+      "expected": "accept"
+    }
+  ]
+}

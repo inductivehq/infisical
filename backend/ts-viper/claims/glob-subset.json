@@ -1,0 +1,83 @@
+{
+  "id": "infisical/glob-subset",
+  "source": "../infisical/backend/src/lib/casl/glob-subset-core.ts",
+  "golden": "../infisical/backend/ts-viper/goldens/glob-subset.spec.ts",
+  "domain": "infisical/glob-subset",
+  "mutants": [
+    "../infisical/backend/ts-viper/mutants/glob-subset-literal-mismatch-buggy.ts",
+    "../infisical/backend/ts-viper/mutants/glob-subset-star-globstar-buggy.ts",
+    "../infisical/backend/ts-viper/mutants/glob-subset-unsupported-open-buggy.ts"
+  ],
+  "claims": [
+    {
+      "id": "infisical.glob.unsupported-fails-closed",
+      "target": "segmentKindContains",
+      "text": "Unsupported glob segment features fail closed.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "unsupported-glob-boundary-bypass",
+      "condition": "parentType === \"unsupported\" || subsetType === \"unsupported\"",
+      "expected": false
+    },
+    {
+      "id": "infisical.glob.globstar-contains-supported",
+      "target": "segmentKindContains",
+      "text": "A parent globstar contains any supported child segment.",
+      "kind": "allow",
+      "criticality": 2,
+      "risk": "legitimate-globstar-denial",
+      "condition": "parentType === \"globstar\" && subsetType !== \"unsupported\"",
+      "expected": true
+    },
+    {
+      "id": "infisical.glob.star-denies-globstar",
+      "target": "segmentKindContains",
+      "text": "A single-segment star does not contain a child globstar.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "single-segment-star-widening",
+      "condition": "parentType === \"star\" && subsetType === \"globstar\"",
+      "expected": false
+    },
+    {
+      "id": "infisical.glob.star-contains-literal",
+      "target": "segmentKindContains",
+      "text": "A single-segment star contains literal child segments.",
+      "kind": "allow",
+      "criticality": 2,
+      "risk": "legitimate-literal-denial",
+      "condition": "parentType === \"star\" && subsetType === \"literal\"",
+      "expected": true
+    },
+    {
+      "id": "infisical.glob.literal-equal",
+      "target": "segmentKindContains",
+      "text": "Equal literal segments are contained.",
+      "kind": "allow",
+      "criticality": 2,
+      "risk": "legitimate-literal-denial",
+      "condition": "parentType === \"literal\" && subsetType === \"literal\" && parentValue === subsetValue",
+      "expected": true
+    },
+    {
+      "id": "infisical.glob.literal-mismatch-denied",
+      "target": "segmentKindContains",
+      "text": "Different literal segments are not contained.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "literal-segment-boundary-bypass",
+      "condition": "parentType === \"literal\" && subsetType === \"literal\" && parentValue !== subsetValue",
+      "expected": false
+    },
+    {
+      "id": "infisical.glob.literal-denies-wildcards",
+      "target": "segmentKindContains",
+      "text": "Literal parent segments do not contain wildcard child segments.",
+      "kind": "deny",
+      "criticality": 3,
+      "risk": "literal-to-wildcard-boundary-bypass",
+      "condition": "parentType === \"literal\" && subsetType !== \"literal\"",
+      "expected": false
+    }
+  ]
+}

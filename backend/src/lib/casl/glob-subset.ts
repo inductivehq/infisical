@@ -1,3 +1,5 @@
+import { segmentKindContains } from "./glob-subset-core";
+
 /**
  * Glob set-containment for permission boundary checks: answers "is every string matched by
  * `subsetGlob` also matched by `parentGlob`?".
@@ -57,18 +59,14 @@ const segmentMatch = (parent: Segment[], subset: Segment[], pi: number, si: numb
   const pSeg = parent[pi];
   const sSeg = subset[si];
 
-  if (pSeg.type === "star") {
-    // `*` matches a single segment of any literal/star content, but not a globstar (which spans
-    // multiple segments and is therefore broader than `*`).
-    if (sSeg.type === "globstar") return false;
-    return segmentMatch(parent, subset, pi + 1, si + 1);
-  }
-
-  if (pSeg.type === "literal") {
-    // A literal segment in parent must be matched by an identical literal segment in subset; any
-    // wildcard in subset would make subset broader than parent.
-    if (sSeg.type !== "literal") return false;
-    if (sSeg.value !== pSeg.value) return false;
+  if (
+    segmentKindContains(
+      pSeg.type,
+      sSeg.type,
+      pSeg.type === "literal" ? pSeg.value : "",
+      sSeg.type === "literal" ? sSeg.value : ""
+    )
+  ) {
     return segmentMatch(parent, subset, pi + 1, si + 1);
   }
 

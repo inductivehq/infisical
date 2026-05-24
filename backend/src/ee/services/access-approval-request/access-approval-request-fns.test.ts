@@ -74,6 +74,11 @@ describe("verifyRequestedPermissions", () => {
     expect(() => verifyRequestedPermissions({ permissions })).toThrow("Permission environment is not a string");
   });
 
+  test("rejects permission with empty environment", () => {
+    const permissions = packRules([makeRule("read", "", "/test/*")]);
+    expect(() => verifyRequestedPermissions({ permissions })).toThrow("Permission environment is not a string");
+  });
+
   test("rejects permission without secret path", () => {
     const permissions = packRules([
       {
@@ -82,6 +87,11 @@ describe("verifyRequestedPermissions", () => {
         conditions: { environment: "dev" }
       }
     ]);
+    expect(() => verifyRequestedPermissions({ permissions })).toThrow("Permission path is not a string");
+  });
+
+  test("rejects permission with empty secret path", () => {
+    const permissions = packRules([makeRule("read", "dev", "")]);
     expect(() => verifyRequestedPermissions({ permissions })).toThrow("Permission path is not a string");
   });
 });

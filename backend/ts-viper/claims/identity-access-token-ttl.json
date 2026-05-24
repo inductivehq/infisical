@@ -1,0 +1,83 @@
+{
+  "id": "infisical/identity-access-token-ttl",
+  "source": "../infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts",
+  "golden": "../infisical/backend/ts-viper/goldens/identity-access-token-ttl.spec.ts",
+  "domain": "infisical/identity-access-token-ttl",
+  "mutants": [
+    "../infisical/backend/ts-viper/mutants/identity-access-token-ttl-buggy.ts",
+    "../infisical/backend/ts-viper/mutants/identity-access-token-ttl-exhausted-floor-buggy.ts",
+    "../infisical/backend/ts-viper/mutants/identity-access-token-ttl-ignore-requested-buggy.ts"
+  ],
+  "claims": [
+    {
+      "id": "infisical.ttl.no-local-cap-uses-ceiling",
+      "target": "computeIssuedTtlCore",
+      "text": "When no requested TTL or maxTTL cap is active, the deployment ceiling is issued.",
+      "kind": "fallback",
+      "criticality": 2,
+      "risk": "unexpected-default-ttl",
+      "condition": "requestedTTL === 0 && maxTTL === 0",
+      "expected": 3600
+    },
+    {
+      "id": "infisical.ttl.requested-cap-wins",
+      "target": "computeIssuedTtlCore",
+      "text": "A smaller positive requested TTL caps the issued token.",
+      "kind": "classification",
+      "criticality": 3,
+      "risk": "requested-ttl-overrun",
+      "condition": "requestedTTL === 300 && maxTTL === 0",
+      "expected": 300
+    },
+    {
+      "id": "infisical.ttl.ceiling-caps-large-request",
+      "target": "computeIssuedTtlCore",
+      "text": "A requested TTL larger than the deployment ceiling is capped to the ceiling.",
+      "kind": "classification",
+      "criticality": 3,
+      "risk": "deployment-ceiling-bypass",
+      "condition": "requestedTTL === 7200 && maxTTL === 0",
+      "expected": 3600
+    },
+    {
+      "id": "infisical.ttl.max-ttl-wins-at-issuance",
+      "target": "computeIssuedTtlCore",
+      "text": "A smaller maxTTL budget caps the first issued token.",
+      "kind": "classification",
+      "criticality": 3,
+      "risk": "max-ttl-budget-bypass",
+      "condition": "requestedTTL === 7200 && maxTTL === 600 && nowSeconds === creationEpoch",
+      "expected": 600
+    },
+    {
+      "id": "infisical.ttl.remaining-budget-wins",
+      "target": "computeIssuedTtlCore",
+      "text": "Renewal uses the remaining maxTTL budget when it is the smallest active cap.",
+      "kind": "classification",
+      "criticality": 3,
+      "risk": "renewal-budget-bypass",
+      "condition": "requestedTTL === 7200 && maxTTL === 3600 && nowSeconds === creationEpoch + 300",
+      "expected": 3300
+    },
+    {
+      "id": "infisical.ttl.exhausted-budget-can-be-negative",
+      "target": "computeIssuedTtlCore",
+      "text": "An exhausted renewal budget is returned as non-positive so callers can reject it.",
+      "kind": "classification",
+      "criticality": 3,
+      "risk": "expired-token-renewal",
+      "condition": "requestedTTL === 7200 && maxTTL === 7200 && nowSeconds === creationEpoch + 7260",
+      "expected": -60
+    },
+    {
+      "id": "infisical.ttl.requested-wins-over-remaining-budget",
+      "target": "computeIssuedTtlCore",
+      "text": "Requested TTL wins when it is below both the ceiling and remaining budget.",
+      "kind": "classification",
+      "criticality": 2,
+      "risk": "requested-ttl-regression",
+      "condition": "requestedTTL === 600 && maxTTL === 3600 && nowSeconds === creationEpoch + 300",
+      "expected": 600
+    }
+  ]
+}

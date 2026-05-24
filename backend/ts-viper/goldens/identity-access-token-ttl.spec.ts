@@ -22,37 +22,38 @@ contract(
     ensures(result<number>() <= ceiling, "Every issued token is capped by the deployment ceiling."),
     ensures(
       implies(requestedTTL > 0, result<number>() <= requestedTTL),
-      "A positive requested TTL caps the issued token.",
+      "A positive requested TTL caps the issued token."
     ),
     ensures(
       implies(maxTTL > 0, result<number>() <= creationEpoch + maxTTL - nowSeconds),
-      "A positive maxTTL caps renewal by the remaining lifetime budget.",
+      "A positive maxTTL caps renewal by the remaining lifetime budget."
     ),
     ensures(
-      implies(
-        requestedTTL <= 0 && maxTTL <= 0,
-        result<number>() === ceiling,
-      ),
-      "When no token-local cap is active, the ceiling is the issued TTL.",
+      implies(requestedTTL <= 0 && maxTTL <= 0, result<number>() === ceiling),
+      "When no token-local cap is active, the ceiling is the issued TTL."
+    ),
+    ensures(
+      implies(requestedTTL > ceiling && maxTTL <= 0, result<number>() === ceiling),
+      "The deployment ceiling wins when it is below the requested TTL and no maxTTL budget applies."
     ),
     ensures(
       implies(
         requestedTTL > 0 &&
           requestedTTL <= ceiling &&
           (maxTTL <= 0 || requestedTTL <= creationEpoch + maxTTL - nowSeconds),
-        result<number>() === requestedTTL,
+        result<number>() === requestedTTL
       ),
-      "The requested TTL wins when it is the smallest active cap.",
+      "The requested TTL wins when it is the smallest active cap."
     ),
     ensures(
       implies(
         maxTTL > 0 &&
           creationEpoch + maxTTL - nowSeconds <= ceiling &&
           (requestedTTL <= 0 || creationEpoch + maxTTL - nowSeconds <= requestedTTL),
-        result<number>() === creationEpoch + maxTTL - nowSeconds,
+        result<number>() === creationEpoch + maxTTL - nowSeconds
       ),
-      "The remaining maxTTL budget wins when it is the smallest active cap.",
-    ),
+      "The remaining maxTTL budget wins when it is the smallest active cap."
+    )
   ],
-  "Spec asserts that issued machine identity JWT TTL is the minimum active cap across request TTL, renewal budget, and deployment ceiling.",
+  "Spec asserts that issued machine identity JWT TTL is the minimum active cap across request TTL, renewal budget, and deployment ceiling."
 );
