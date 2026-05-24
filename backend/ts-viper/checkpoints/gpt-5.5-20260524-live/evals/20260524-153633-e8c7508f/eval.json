@@ -1,0 +1,161 @@
+{
+  "generation": null,
+  "inputs": {
+    "claims": "/Users/andy/dev/infisical/backend/ts-viper/claims/glob-subset.json",
+    "expected_provable": false,
+    "golden": "/Users/andy/dev/infisical/backend/ts-viper/goldens/glob-subset.spec.ts",
+    "mutant": "/Users/andy/dev/infisical/backend/ts-viper/mutants/glob-subset-unsupported-open-buggy.ts",
+    "target": "/Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts"
+  },
+  "outputs": {
+    "spec": "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+    "spec_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197"
+  },
+  "run": {
+    "duration_ms": 3140,
+    "id": "20260524-153633-e8c7508f",
+    "repository_revision": "2f99468e5d733f7eacb1f2effa1d79ae0418fe4b",
+    "specr_version": "0.1.0",
+    "started_at": "2026-05-24T15:36:33.392273Z"
+  },
+  "score": {
+    "accuracy": {
+      "claim_matches": [
+        {
+          "criticality": 3,
+          "golden_claim_id": "infisical.glob.unsupported-fails-closed",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        },
+        {
+          "criticality": 2,
+          "golden_claim_id": "infisical.glob.globstar-contains-supported",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        },
+        {
+          "criticality": 3,
+          "golden_claim_id": "infisical.glob.star-denies-globstar",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        },
+        {
+          "criticality": 2,
+          "golden_claim_id": "infisical.glob.star-contains-literal",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        },
+        {
+          "criticality": 2,
+          "golden_claim_id": "infisical.glob.literal-equal",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        },
+        {
+          "criticality": 3,
+          "golden_claim_id": "infisical.glob.literal-mismatch-denied",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        },
+        {
+          "criticality": 3,
+          "golden_claim_id": "infisical.glob.literal-denies-wildcards",
+          "matched": true,
+          "reason": null,
+          "target": "segmentKindContains"
+        }
+      ],
+      "claim_recall": 1.0,
+      "critical_recall": 1.0,
+      "matched_claims": 7,
+      "matched_critical_claims": 4,
+      "matched_weight": 18,
+      "reference_claims_validated": true,
+      "status": "scored",
+      "total_claims": 7,
+      "total_critical_claims": 4,
+      "total_weight": 18,
+      "weighted_recall": 1.0
+    },
+    "parsable": {
+      "categories": [],
+      "command": [
+        "npm",
+        "exec",
+        "--",
+        "tsx",
+        "src/index.ts",
+        "/Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts",
+        "--spec-path",
+        "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+        "--dump-viper"
+      ],
+      "diagnostics": [],
+      "status": "passed"
+    },
+    "provable": {
+      "command": [
+        "npm",
+        "exec",
+        "--",
+        "tsx",
+        "src/index.ts",
+        "/Users/andy/dev/infisical/backend/ts-viper/mutants/glob-subset-unsupported-open-buggy.ts",
+        "--spec-path",
+        "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.mutant-zyd406_z.spec.ts",
+        "--dump-viper",
+        "--verify",
+        "--server-url",
+        "http://localhost:8080",
+        "--verifier",
+        "silicon"
+      ],
+      "diagnostics": [
+        "Verification failed:",
+        "  /Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.mutant-zyd406_z.spec.ts:14:13: Postcondition of segmentKindContains might not hold. Assertion parentType == 1 && subsetType == 1 ==> retval == (parentValue == subsetValue) might not hold. (glob-subset-unsupported-open-buggy.vpr@18.9--18.140)"
+      ],
+      "expected_provable": false,
+      "failure_kind": "verification_failure",
+      "mutant_api_compatibility": {
+        "categories": [],
+        "command": [
+          "npm",
+          "exec",
+          "--",
+          "tsx",
+          "src/index.ts",
+          "/Users/andy/dev/infisical/backend/ts-viper/mutants/glob-subset-unsupported-open-buggy.ts",
+          "--spec-path",
+          "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.mutant-zyd406_z.spec.ts",
+          "--dump-viper"
+        ],
+        "diagnostics": [],
+        "status": "passed"
+      },
+      "provable": false,
+      "runtime": "/Users/andy/dev/infisical/backend/ts-viper/mutants/glob-subset-unsupported-open-buggy.ts",
+      "spec": "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+      "spec_binding": "temporary_mutant_bound_sidecar",
+      "status": "passed"
+    },
+    "quality": {
+      "artifact_flags": {
+        "identifier_self_comparison": false,
+        "number_is_nan": false,
+        "object_is": false,
+        "result_self_comparison": false
+      },
+      "clause_count": 9,
+      "commented_clause_count": 9,
+      "helper_comment_coverage": 1.0,
+      "requires_count": 2,
+      "status": "scored"
+    }
+  }
+}

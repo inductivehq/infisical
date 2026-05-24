@@ -1,0 +1,302 @@
+{
+  "audit_records": [
+    {
+      "audit": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/audit/access-approval-request-core.spec.generation.json",
+      "generated_at": "2026-05-24T15:35:00.999346+00:00",
+      "model": "openai/gpt-5.5",
+      "output": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/access-approval-request-core.spec.ts",
+      "output_sha256": "e901916045c51b5147626ef8510b1179f66d2f19568ff580ec41d09a4382060d",
+      "raw_clause_count": 7,
+      "request_messages_sha256": "f0b3cedbc5e8a53bd8e551cffbdc9eb5a7be614cd153fd0d8b64ac19cf6a53da",
+      "response_content_sha256": "85f9500be5f92ae6d57f141078e9e2032f44cb4286db3cb117d079a5d97ffa32",
+      "selector": "classifyRequestedPermissionScopeCore",
+      "source": "/Users/andy/dev/infisical/backend/src/ee/services/access-approval-request/access-approval-request-core.ts",
+      "target": "classifyRequestedPermissionScopeCore"
+    },
+    {
+      "audit": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/audit/glob-subset-core.spec.generation.json",
+      "generated_at": "2026-05-24T15:35:11.121684+00:00",
+      "model": "openai/gpt-5.5",
+      "output": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+      "output_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197",
+      "raw_clause_count": 9,
+      "request_messages_sha256": "e1406b44119c9a6bfce318c22f68ad54a05c9cba57083d7752bdd0069b2412a3",
+      "response_content_sha256": "bbc89160d0fa2e8512fda7fbe330d2e888d2c17f1088db850a23ba3f0538cd48",
+      "selector": "segmentKindContains",
+      "source": "/Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts",
+      "target": "segmentKindContains"
+    },
+    {
+      "audit": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/audit/identity-access-token-ttl.spec.generation.json",
+      "generated_at": "2026-05-24T15:34:35.534375+00:00",
+      "model": "openai/gpt-5.5",
+      "output": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/identity-access-token-ttl.spec.ts",
+      "output_sha256": "429ac4574443ce0bdca9fdc838dc372701a9b2b73c9b810e930392e9fde7d7a2",
+      "raw_clause_count": 12,
+      "request_messages_sha256": "a7e18e46e352f25cf95e43cea44179b5921f290db1ca6d617896ac5f7f246333",
+      "response_content_sha256": "24a4e5999cc8ce8587c0457186cc2e585693ceaf8859b2842ea78b75fae27262",
+      "selector": "computeIssuedTtlCore",
+      "source": "/Users/andy/dev/infisical/backend/src/services/identity-access-token/identity-access-token-ttl.ts",
+      "target": "computeIssuedTtlCore"
+    }
+  ],
+  "checkpoint_id": "gpt-5.5-20260524-live",
+  "created_at": "2026-05-24T15:38:02.861206+00:00",
+  "infisical_revision": "1739d749cdec3fcf2c6557ee3ce7ca8c1b2f933c",
+  "model": "openai/gpt-5.5",
+  "notes": [
+    "Generated specs are live GPT-5.5 outputs captured through specr --audit-dir.",
+    "TTL and access-approval generated specs were not parsable because the model emitted Number.* helper calls unsupported by sidecar expressions.",
+    "Glob-subset generated spec parsed, verified on the good runtime, achieved full claim recall, and rejected all three checked mutants."
+  ],
+  "schema_version": 1,
+  "score_summary": {
+    "access-approval-request-core.ts": {
+      "good": {
+        "accuracy": "not_scored",
+        "claim_recall": null,
+        "parsable": "failed",
+        "provable": "not_run",
+        "weighted_recall": null
+      },
+      "mutants_blocked_before_verification": 3,
+      "mutants_rejected": 0,
+      "mutants_total": 3
+    },
+    "glob-subset-core.ts": {
+      "good": {
+        "accuracy": "scored",
+        "claim_recall": 1.0,
+        "parsable": "passed",
+        "provable": "passed",
+        "weighted_recall": 1.0
+      },
+      "mutants_blocked_before_verification": 0,
+      "mutants_rejected": 3,
+      "mutants_total": 3
+    },
+    "identity-access-token-ttl.ts": {
+      "good": {
+        "accuracy": "not_scored",
+        "claim_recall": null,
+        "parsable": "failed",
+        "provable": "not_run",
+        "weighted_recall": null
+      },
+      "mutants_blocked_before_verification": 3,
+      "mutants_rejected": 0,
+      "mutants_total": 3
+    }
+  },
+  "scores": [
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153547-5a12a806/eval.json",
+      "mutant": null,
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/identity-access-token-ttl.spec.ts",
+      "spec_sha256": "429ac4574443ce0bdca9fdc838dc372701a9b2b73c9b810e930392e9fde7d7a2",
+      "target_file": "identity-access-token-ttl.ts"
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153547-6369f210/eval.json",
+      "mutant": null,
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/access-approval-request-core.spec.ts",
+      "spec_sha256": "e901916045c51b5147626ef8510b1179f66d2f19568ff580ec41d09a4382060d",
+      "target_file": "access-approval-request-core.ts"
+    },
+    {
+      "accuracy": "scored",
+      "claim_recall": 1.0,
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153547-b18b09f5/eval.json",
+      "mutant": null,
+      "parsable": "passed",
+      "provable": "passed",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+      "spec_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197",
+      "target_file": "glob-subset-core.ts",
+      "weighted_recall": 1.0
+    },
+    {
+      "accuracy": "scored",
+      "claim_recall": 1.0,
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-673bbcd7/eval.json",
+      "mutant": "glob-subset-literal-mismatch-buggy.ts",
+      "parsable": "passed",
+      "provable": "passed",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+      "spec_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197",
+      "target_file": "glob-subset-core.ts",
+      "weighted_recall": 1.0
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-74ec55dc/eval.json",
+      "mutant": "access-approval-request-missing-env-path-accept-buggy.ts",
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/access-approval-request-core.spec.ts",
+      "spec_sha256": "e901916045c51b5147626ef8510b1179f66d2f19568ff580ec41d09a4382060d",
+      "target_file": "access-approval-request-core.ts"
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-7b4852f1/eval.json",
+      "mutant": "access-approval-request-empty-accept-buggy.ts",
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/access-approval-request-core.spec.ts",
+      "spec_sha256": "e901916045c51b5147626ef8510b1179f66d2f19568ff580ec41d09a4382060d",
+      "target_file": "access-approval-request-core.ts"
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-899863ef/eval.json",
+      "mutant": "identity-access-token-ttl-buggy.ts",
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/identity-access-token-ttl.spec.ts",
+      "spec_sha256": "429ac4574443ce0bdca9fdc838dc372701a9b2b73c9b810e930392e9fde7d7a2",
+      "target_file": "identity-access-token-ttl.ts"
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-c0218d5f/eval.json",
+      "mutant": "identity-access-token-ttl-exhausted-floor-buggy.ts",
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/identity-access-token-ttl.spec.ts",
+      "spec_sha256": "429ac4574443ce0bdca9fdc838dc372701a9b2b73c9b810e930392e9fde7d7a2",
+      "target_file": "identity-access-token-ttl.ts"
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-c940d12d/eval.json",
+      "mutant": "access-approval-request-mixed-accept-buggy.ts",
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/access-approval-request-core.spec.ts",
+      "spec_sha256": "e901916045c51b5147626ef8510b1179f66d2f19568ff580ec41d09a4382060d",
+      "target_file": "access-approval-request-core.ts"
+    },
+    {
+      "accuracy": "scored",
+      "claim_recall": 1.0,
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-cfe7720d/eval.json",
+      "mutant": "glob-subset-star-globstar-buggy.ts",
+      "parsable": "passed",
+      "provable": "passed",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+      "spec_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197",
+      "target_file": "glob-subset-core.ts",
+      "weighted_recall": 1.0
+    },
+    {
+      "accuracy": "scored",
+      "claim_recall": 1.0,
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-e8c7508f/eval.json",
+      "mutant": "glob-subset-unsupported-open-buggy.ts",
+      "parsable": "passed",
+      "provable": "passed",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+      "spec_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197",
+      "target_file": "glob-subset-core.ts",
+      "weighted_recall": 1.0
+    },
+    {
+      "accuracy": "not_scored",
+      "diagnostic_summary": "Unexpected error: AstTransformError: Only direct helper calls are supported in sidecar expressions at {",
+      "eval": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/evals/20260524-153633-f77ca8dd/eval.json",
+      "mutant": "identity-access-token-ttl-ignore-requested-buggy.ts",
+      "parsable": "failed",
+      "provable": "not_run",
+      "quality": {
+        "comment_coverage": null,
+        "postcondition_count": null,
+        "precondition_count": null,
+        "useful_clause_count": null
+      },
+      "spec": "backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/identity-access-token-ttl.spec.ts",
+      "spec_sha256": "429ac4574443ce0bdca9fdc838dc372701a9b2b73c9b810e930392e9fde7d7a2",
+      "target_file": "identity-access-token-ttl.ts"
+    }
+  ],
+  "ts_viper_revision": "2f99468e5d733f7eacb1f2effa1d79ae0418fe4b"
+}

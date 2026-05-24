@@ -1,0 +1,95 @@
+{
+  "command": [
+    "/Users/andy/dev/ts-viper/specr/.venv/bin/specr",
+    "generate",
+    "/Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts:segmentKindContains",
+    "--model",
+    "openai/gpt-5.5",
+    "--output-dir",
+    "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated",
+    "--audit-dir",
+    "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/audit"
+  ],
+  "generated_at": "2026-05-24T15:35:11.121684+00:00",
+  "model": "openai/gpt-5.5",
+  "output": "/Users/andy/dev/infisical/backend/ts-viper/checkpoints/gpt-5.5-20260524-live/generated/glob-subset-core.spec.ts",
+  "output_sha256": "aaa0861434b84c6e7f76a5b281332e9040b10f629506d307d4a4311403388197",
+  "records": [
+    {
+      "model": "openai/gpt-5.5",
+      "request": {
+        "messages": [
+          {
+            "content": "You generate TypeScript ts-viper sidecar contract clauses. Return only JSON shaped as {\"clauses\":[\"ensures(..., \\\"comment\\\")\", \"requires(..., \\\"comment\\\")\"]}.",
+            "role": "system"
+          },
+          {
+            "content": "Source path: /Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts\nTarget: segmentKindContains(parentType: GlobSubsetSegmentKind, subsetType: GlobSubsetSegmentKind, parentValue: string, subsetValue: string): boolean\n\nAvailable contract scope names: parentType, subsetType, parentValue, subsetValue.\nThe generated sidecar builder destructures those names directly. There is no scope object; do not write scope.user, scope.result, or $result. Refer to the return value as result<boolean>().\nUse implies(condition, consequence) for branch-specific behavior. Do not use ternary expressions. Each clause must be a complete requires(...) or ensures(...) expression, and ensures(...) must receive a boolean expression, not an arrow callback. Every requires(...) and ensures(...) clause must include a short string comment as its second argument explaining the domain behavior being asserted. Prefer clear preconditions for the valid input domain and postconditions that state observable caps, denials, classifications, or fallback outcomes. Do not emit no-op clauses or clauses that merely restate TypeScript type annotations. This rule applies to any similarly trivial type restatement, not only the examples here: do not write Array.isArray(x) for array-typed values, typeof x === \"string\" for string-typed values, non-nullish checks for non-nullish values, !Number.isNaN(x) for number-typed values, or requires(true)/ensures(true). Use === or !== directly instead of Object.is(...). Do not encode NaN checks as self-comparisons such as x !== x or result<T>() !== result<T>(). Prefer behavioral clauses that relate inputs, receiver state, and result values over restating the implementation branch structure.\n\nRuntime source:\n```ts\nexport type GlobSubsetSegmentKind = string;\n\nexport const segmentKindContains = (\n  parentType: GlobSubsetSegmentKind,\n  subsetType: GlobSubsetSegmentKind,\n  parentValue: string,\n  subsetValue: string\n): boolean => {\n  let contains = false;\n\n  if (parentType === \"globstar\" && subsetType !== \"unsupported\") {\n    contains = true;\n  } else if (parentType === \"star\" && subsetType !== \"globstar\" && subsetType !== \"unsupported\") {\n    contains = true;\n  } else if (parentType === \"literal\" && subsetType === \"literal\" && parentValue === subsetValue) {\n    contains = true;\n  }\n\n  return contains;\n};\n\n```\n\nReturn JSON with a clauses array. Each clause must be a TypeScript expression accepted inside contract(target, ({ ... }) => [ ... ]).",
+            "role": "user"
+          }
+        ],
+        "messages_sha256": "e1406b44119c9a6bfce318c22f68ad54a05c9cba57083d7752bdd0069b2412a3"
+      },
+      "response": {
+        "content": "{\"clauses\":[\"requires(parentType === \\\"globstar\\\" || parentType === \\\"star\\\" || parentType === \\\"literal\\\" || parentType === \\\"unsupported\\\", \\\"parent segment kind is recognized\\\")\",\"requires(subsetType === \\\"globstar\\\" || subsetType === \\\"star\\\" || subsetType === \\\"literal\\\" || subsetType === \\\"unsupported\\\", \\\"subset segment kind is recognized\\\")\",\"ensures(implies(parentType === \\\"globstar\\\" && subsetType !== \\\"unsupported\\\", result<boolean>() === true), \\\"globstar contains any supported subset segment\\\")\",\"ensures(implies(parentType === \\\"globstar\\\" && subsetType === \\\"unsupported\\\", result<boolean>() === false), \\\"globstar does not contain unsupported subsets\\\")\",\"ensures(implies(parentType === \\\"star\\\" && (subsetType === \\\"star\\\" || subsetType === \\\"literal\\\"), result<boolean>() === true), \\\"star contains single-segment wildcard or literal subsets\\\")\",\"ensures(implies(parentType === \\\"star\\\" && (subsetType === \\\"globstar\\\" || subsetType === \\\"unsupported\\\"), result<boolean>() === false), \\\"star cannot contain globstar or unsupported subsets\\\")\",\"ensures(implies(parentType === \\\"literal\\\" && subsetType === \\\"literal\\\", result<boolean>() === (parentValue === subsetValue)), \\\"literal containment requires equal segment text\\\")\",\"ensures(implies(parentType === \\\"literal\\\" && subsetType !== \\\"literal\\\", result<boolean>() === false), \\\"literal parents contain only literal subsets\\\")\",\"ensures(implies(parentType === \\\"unsupported\\\", result<boolean>() === false), \\\"unsupported parents contain no subset segment\\\")\"]}",
+        "content_sha256": "bbc89160d0fa2e8512fda7fbe330d2e888d2c17f1088db850a23ba3f0538cd48",
+        "payload": {
+          "choices": [
+            {
+              "finish_reason": "stop",
+              "index": 0,
+              "message": {
+                "annotations": [],
+                "content": "{\"clauses\":[\"requires(parentType === \\\"globstar\\\" || parentType === \\\"star\\\" || parentType === \\\"literal\\\" || parentType === \\\"unsupported\\\", \\\"parent segment kind is recognized\\\")\",\"requires(subsetType === \\\"globstar\\\" || subsetType === \\\"star\\\" || subsetType === \\\"literal\\\" || subsetType === \\\"unsupported\\\", \\\"subset segment kind is recognized\\\")\",\"ensures(implies(parentType === \\\"globstar\\\" && subsetType !== \\\"unsupported\\\", result<boolean>() === true), \\\"globstar contains any supported subset segment\\\")\",\"ensures(implies(parentType === \\\"globstar\\\" && subsetType === \\\"unsupported\\\", result<boolean>() === false), \\\"globstar does not contain unsupported subsets\\\")\",\"ensures(implies(parentType === \\\"star\\\" && (subsetType === \\\"star\\\" || subsetType === \\\"literal\\\"), result<boolean>() === true), \\\"star contains single-segment wildcard or literal subsets\\\")\",\"ensures(implies(parentType === \\\"star\\\" && (subsetType === \\\"globstar\\\" || subsetType === \\\"unsupported\\\"), result<boolean>() === false), \\\"star cannot contain globstar or unsupported subsets\\\")\",\"ensures(implies(parentType === \\\"literal\\\" && subsetType === \\\"literal\\\", result<boolean>() === (parentValue === subsetValue)), \\\"literal containment requires equal segment text\\\")\",\"ensures(implies(parentType === \\\"literal\\\" && subsetType !== \\\"literal\\\", result<boolean>() === false), \\\"literal parents contain only literal subsets\\\")\",\"ensures(implies(parentType === \\\"unsupported\\\", result<boolean>() === false), \\\"unsupported parents contain no subset segment\\\")\"]}",
+                "function_call": null,
+                "provider_specific_fields": {
+                  "refusal": null
+                },
+                "role": "assistant",
+                "tool_calls": null
+              },
+              "provider_specific_fields": {}
+            }
+          ],
+          "created": 1779636888,
+          "id": "chatcmpl-Dj58ictvLIeeqRRgRQ0jZliHG6Rme",
+          "model": "gpt-5.5-2026-04-23",
+          "object": "chat.completion",
+          "service_tier": "default",
+          "system_fingerprint": null,
+          "usage": {
+            "completion_tokens": 1361,
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": 0,
+              "audio_tokens": 0,
+              "reasoning_tokens": 1013,
+              "rejected_prediction_tokens": 0
+            },
+            "prompt_tokens": 589,
+            "prompt_tokens_details": {
+              "audio_tokens": 0,
+              "cached_tokens": 0
+            },
+            "total_tokens": 1950
+          }
+        },
+        "raw_clauses": [
+          "requires(parentType === \"globstar\" || parentType === \"star\" || parentType === \"literal\" || parentType === \"unsupported\", \"parent segment kind is recognized\")",
+          "requires(subsetType === \"globstar\" || subsetType === \"star\" || subsetType === \"literal\" || subsetType === \"unsupported\", \"subset segment kind is recognized\")",
+          "ensures(implies(parentType === \"globstar\" && subsetType !== \"unsupported\", result<boolean>() === true), \"globstar contains any supported subset segment\")",
+          "ensures(implies(parentType === \"globstar\" && subsetType === \"unsupported\", result<boolean>() === false), \"globstar does not contain unsupported subsets\")",
+          "ensures(implies(parentType === \"star\" && (subsetType === \"star\" || subsetType === \"literal\"), result<boolean>() === true), \"star contains single-segment wildcard or literal subsets\")",
+          "ensures(implies(parentType === \"star\" && (subsetType === \"globstar\" || subsetType === \"unsupported\"), result<boolean>() === false), \"star cannot contain globstar or unsupported subsets\")",
+          "ensures(implies(parentType === \"literal\" && subsetType === \"literal\", result<boolean>() === (parentValue === subsetValue)), \"literal containment requires equal segment text\")",
+          "ensures(implies(parentType === \"literal\" && subsetType !== \"literal\", result<boolean>() === false), \"literal parents contain only literal subsets\")",
+          "ensures(implies(parentType === \"unsupported\", result<boolean>() === false), \"unsupported parents contain no subset segment\")"
+        ]
+      },
+      "target": "segmentKindContains"
+    }
+  ],
+  "repository_revision": "2f99468e5d733f7eacb1f2effa1d79ae0418fe4b",
+  "schema_version": 1,
+  "selector": "segmentKindContains",
+  "source": "/Users/andy/dev/infisical/backend/src/lib/casl/glob-subset-core.ts"
+}
